@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light" />
+<title>تحدي التكافل الاجتماعي | المستوى العاشر</title>
+<style>
+  :root{
+    --navy:#081b33;
+    --navy-2:#123657;
+    --teal:#0f8f78;
+    --teal-2:#17b890;
+    --gold:#f2c14e;
+    --gold-2:#ffe4a1;
+    --cream:#fffaf0;
+    --ink:#122235;
+    --muted:#64748b;
+    --surface:#ffffff;
+    --surface-2:#f7fafc;
+    --line:#dbe5ef;
+    --success:#168a5b;
+    --success-bg:#e9fbf2;
+    --danger:#c24141;
+    --danger-bg:#fff0f0;
+    --shadow:0 20px 60px rgba(8,27,51,.15);
+    --radius:26px;
+  }
+  *{box-sizing:border-box}
+  html,body{min-height:100%;margin:0}
+  body{
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 12% 10%, rgba(242,193,78,.22), transparent 25%),
+      radial-gradient(circle at 88% 18%, rgba(23,184,144,.17), transparent 30%),
+      linear-gradient(145deg,#eff6fb 0%,#f8fbfd 50%,#f5f1e7 100%);
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;
+    background-image:linear-gradient(30deg,rgba(8,27,51,.12) 1px,transparent 1px),linear-gradient(150deg,rgba(8,27,51,.10) 1px,transparent 1px);
+    background-size:36px 62px;
+    mask-image:linear-gradient(to bottom,rgba(0,0,0,.5),transparent 78%);
+  }
+  button{font:inherit}
+  button:focus-visible{outline:4px solid rgba(242,193,78,.55);outline-offset:3px}
+  .app{width:min(1180px,94vw);margin:0 auto;padding:26px 0 42px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .screen{display:none;width:100%;animation:screenIn .5s cubic-bezier(.2,.8,.2,1)}
+  .screen.active{display:block}
+  @keyframes screenIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* Start */
+  .hero{
+    position:relative;overflow:hidden;border-radius:34px;background:linear-gradient(135deg,var(--navy),#0b2948 60%,#123e5d);
+    color:white;box-shadow:var(--shadow);padding:clamp(30px,5vw,70px);isolation:isolate;
+  }
+  .hero::before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;left:-180px;top:-160px;background:radial-gradient(circle,rgba(242,193,78,.28),transparent 62%);z-index:-1}
+  .hero::after{content:"";position:absolute;width:500px;height:500px;border-radius:50%;right:-210px;bottom:-260px;background:radial-gradient(circle,rgba(23,184,144,.25),transparent 62%);z-index:-1}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);gap:38px;align-items:center}
+  .eyebrow{display:inline-flex;gap:9px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:9px 14px;font-weight:800;font-size:.92rem}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px rgba(242,193,78,.13)}
+  h1{font-size:clamp(2.2rem,5.1vw,5rem);line-height:1.05;margin:18px 0 15px;letter-spacing:-.03em}
+  .subtitle{font-size:clamp(1rem,2vw,1.25rem);line-height:1.9;color:#dfeaf5;max-width:760px;margin:0}
+  .hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin:25px 0 28px}
+  .hero-stat{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:12px 15px;min-width:120px}
+  .hero-stat strong{display:block;font-size:1.1rem;color:white}.hero-stat span{font-size:.85rem;color:#c9d7e6}
+  .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .primary-btn{border:0;border-radius:16px;background:linear-gradient(135deg,var(--gold),#ffd874);color:var(--navy);font-weight:900;padding:15px 24px;cursor:pointer;box-shadow:0 12px 30px rgba(242,193,78,.25);transition:.2s transform,.2s box-shadow}
+  .primary-btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(242,193,78,.32)}
+  .toggle-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:white;padding:12px 14px;border-radius:14px;cursor:pointer;transition:.2s}
+  .toggle-btn:hover{background:rgba(255,255,255,.12)}
+  .toggle-btn.on{border-color:rgba(23,184,144,.55);background:rgba(23,184,144,.14)}
+  .source-note{margin-top:18px;color:#a9bdd0;font-size:.84rem}
+  .hero-art{display:flex;justify-content:center;align-items:center;min-height:360px}
+  .seal{position:relative;width:min(330px,70vw);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.17),rgba(255,255,255,.03) 48%,rgba(0,0,0,.15));border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 0 20px rgba(255,255,255,.025),0 30px 70px rgba(0,0,0,.25)}
+  .seal::before,.seal::after{content:"";position:absolute;border-radius:50%;border:1px dashed rgba(242,193,78,.42)}
+  .seal::before{inset:16px}.seal::after{inset:39px}
+  .seal-icon{width:120px;height:120px;display:grid;place-items:center;border-radius:28px;background:linear-gradient(135deg,var(--teal),var(--teal-2));box-shadow:0 18px 45px rgba(23,184,144,.25);font-size:3.8rem;transform:rotate(-5deg);animation:float 3.7s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-10px) rotate(5deg)}}
+  .orbit{position:absolute;inset:0;animation:spin 18s linear infinite}.orbit span{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--gold);top:25px;right:50%;box-shadow:0 0 0 7px rgba(242,193,78,.08)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* Game */
+  .game-shell{background:rgba(255,255,255,.78);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.72);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+  .topbar{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:18px 22px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:white}
+  .brandline{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--gold),#ffd77c);display:grid;place-items:center;color:var(--navy);font-size:1.25rem;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+  .brandline strong{display:block;font-size:1rem}.brandline small{color:#bfd0df;display:block;margin-top:2px}
+  .audio-cluster{display:flex;gap:8px}.mini-btn{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:white;border-radius:11px;padding:9px 11px;cursor:pointer}.mini-btn.on{background:rgba(23,184,144,.16);border-color:rgba(23,184,144,.48)}
+
+  .status{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 22px 8px}
+  .progress-info{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px;font-weight:800;font-size:.94rem}
+  .progress-track{height:12px;background:#e8eef4;border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(8,27,51,.08)}
+  .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:inherit;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+  .hud{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .hud-chip{min-width:88px;padding:9px 11px;border-radius:14px;background:#f7fafc;border:1px solid var(--line);text-align:center;box-shadow:0 4px 12px rgba(8,27,51,.04)}
+  .hud-chip span{display:block;color:var(--muted);font-size:.72rem;font-weight:700}.hud-chip strong{display:block;margin-top:2px;font-size:1rem}
+
+  .content{padding:12px 22px 24px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+  .pill{padding:7px 10px;border-radius:999px;background:#f0f5f8;border:1px solid #e1eaf0;color:#31506b;font-size:.8rem;font-weight:800}
+  .pill.difficulty{background:#fff8e4;border-color:#f6e4ad;color:#866312}
+  .question-card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;align-items:center;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfdff);border-radius:24px;padding:22px;box-shadow:0 10px 25px rgba(8,27,51,.06)}
+  .visual{width:120px;height:120px;border-radius:24px;background:linear-gradient(135deg,rgba(15,143,120,.12),rgba(242,193,78,.18));display:grid;place-items:center;border:1px solid rgba(15,143,120,.15);position:relative;overflow:hidden}
+  .visual::before{content:"";position:absolute;width:85px;height:85px;border:1px dashed rgba(8,27,51,.12);border-radius:50%;animation:spin 14s linear infinite}
+  .visual .vicon{font-size:3rem;position:relative;filter:drop-shadow(0 8px 10px rgba(8,27,51,.12))}
+  .q-number{color:var(--teal);font-weight:900;font-size:.82rem;letter-spacing:.02em;margin-bottom:6px}
+  .question{font-size:clamp(1.25rem,2.7vw,1.8rem);line-height:1.75;margin:0;font-weight:900;letter-spacing:-.015em}
+  .answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+  .answer{position:relative;display:flex;align-items:flex-start;gap:11px;text-align:right;width:100%;border:1px solid #d7e2eb;background:white;color:var(--ink);border-radius:18px;padding:15px 16px;cursor:pointer;min-height:74px;line-height:1.65;font-weight:800;transition:.18s transform,.18s border-color,.18s box-shadow,.18s background}
+  .answer:hover:not(:disabled){transform:translateY(-2px);border-color:#9fb8c9;box-shadow:0 9px 20px rgba(8,27,51,.08)}
+  .answer:active:not(:disabled){transform:scale(.992)}
+  .answer .label{flex:0 0 34px;width:34px;height:34px;border-radius:11px;background:#eff4f7;display:grid;place-items:center;color:#48647a;font-weight:900}
+  .answer .text{flex:1;padding-top:3px}
+  .answer .state{font-size:1.2rem;margin-inline-start:auto;opacity:0;transform:scale(.6);transition:.15s}
+  .answer.correct{border-color:rgba(22,138,91,.55);background:var(--success-bg);box-shadow:0 10px 25px rgba(22,138,91,.13)}
+  .answer.correct .label{background:var(--success);color:#fff}.answer.correct .state{opacity:1;transform:none;color:var(--success)}
+  .answer.wrong{border-color:rgba(194,65,65,.55);background:var(--danger-bg);animation:shake .32s ease}.answer.wrong .label{background:var(--danger);color:white}.answer.wrong .state{opacity:1;transform:none;color:var(--danger)}
+  @keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+  .answer:disabled{cursor:default}
+  .feedback{min-height:54px;margin-top:14px;border-radius:15px;display:flex;align-items:center;gap:10px;padding:10px 14px;font-weight:800;opacity:0;transform:translateY(5px);transition:.2s;background:#f8fafc;border:1px solid transparent}
+  .feedback.show{opacity:1;transform:none}.feedback.good{background:var(--success-bg);border-color:#c8ead9;color:#0d6b45}.feedback.bad{background:var(--danger-bg);border-color:#f1cccc;color:#9d2f2f}
+  .feedback-icon{font-size:1.2rem}
+
+  /* Results */
+  .results{position:relative;overflow:hidden;border-radius:34px;background:linear-gradient(145deg,#ffffff,#f7fbfd);border:1px solid white;box-shadow:var(--shadow);padding:clamp(26px,4vw,52px);text-align:center}
+  .result-badge{width:112px;height:112px;border-radius:32px;margin:0 auto 18px;display:grid;place-items:center;font-size:3rem;background:linear-gradient(135deg,var(--teal),var(--teal-2));color:white;box-shadow:0 18px 42px rgba(23,184,144,.24);animation:pop .55s cubic-bezier(.2,.9,.2,1.2)}
+  @keyframes pop{from{transform:scale(.55) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+  .results h2{font-size:clamp(2rem,5vw,4rem);margin:4px 0 8px;color:var(--navy)}
+  .results .lead{color:var(--muted);font-size:1.08rem;line-height:1.8;margin:0 auto 22px;max-width:760px}
+  .result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:900px;margin:0 auto 24px}
+  .result-card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 18px rgba(8,27,51,.05)}
+  .result-card span{display:block;color:var(--muted);font-size:.8rem;font-weight:800}.result-card strong{display:block;margin-top:5px;font-size:1.35rem;color:var(--navy)}
+  .result-message{max-width:780px;margin:0 auto 24px;padding:16px 18px;border-radius:18px;background:#fff9e9;border:1px solid #f4e0a3;color:#735716;font-weight:900;line-height:1.8}
+  .footer-note{font-size:.82rem;color:#8092a2;margin-top:16px}
+
+  /* Overlays */
+  .milestone{position:fixed;inset:0;background:rgba(6,20,36,.68);backdrop-filter:blur(6px);display:none;place-items:center;z-index:1000;padding:20px}
+  .milestone.show{display:grid;animation:fadeIn .2s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .milestone-card{width:min(520px,92vw);background:white;border-radius:28px;padding:28px;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.28);animation:pop .45s cubic-bezier(.2,.9,.2,1.15)}
+  .milestone-card .big{font-size:3rem}.milestone-card h3{font-size:1.8rem;margin:10px 0 8px}.milestone-card p{color:var(--muted);line-height:1.75;margin:0}
+  .confetti{position:fixed;pointer-events:none;inset:0;overflow:hidden;z-index:999}
+  .confetti i{position:absolute;width:9px;height:16px;border-radius:3px;top:-20px;animation:fall 1.35s ease-in forwards;opacity:.95}
+  @keyframes fall{to{transform:translate3d(var(--drift),105vh,0) rotate(620deg);opacity:.15}}
+
+  .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+
+  @media (max-width:860px){
+    .app{align-items:flex-start;padding-top:14px}
+    .hero-grid{grid-template-columns:1fr}.hero-art{min-height:260px}.seal{width:min(260px,70vw)}
+    .status{grid-template-columns:1fr}.hud{justify-content:stretch}.hud-chip{flex:1}
+    .question-card{grid-template-columns:1fr}.visual{width:100%;height:95px}.answers{grid-template-columns:1fr}
+    .result-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width:560px){
+    .app{width:96vw}.hero{border-radius:24px;padding:24px 20px}.hero-art{min-height:215px}.seal{width:210px}.seal-icon{width:88px;height:88px;font-size:2.8rem}
+    .topbar{grid-template-columns:1fr;gap:12px}.audio-cluster{justify-content:flex-start}
+    .status,.content{padding-inline:14px}.question-card{padding:16px;border-radius:20px}.question{font-size:1.24rem}.answer{padding:13px;min-height:68px}
+    .result-grid{grid-template-columns:1fr 1fr}.results{border-radius:24px;padding:24px 17px}
+  }
+  @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <main id="startScreen" class="screen active" aria-labelledby="gameTitle">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> التربية الإسلامية · المستوى العاشر</div>
+          <h1 id="gameTitle">تحدي التكافل الاجتماعي</h1>
+          <p class="subtitle">رحلة تفاعلية في الحديث الشريف: افهم المعاني، اكتشف القيم، ثم طبّق ما تعلمت في مواقف قصيرة وواضحة.</p>
+          <div class="hero-stats" aria-label="معلومات التحدي">
+            <div class="hero-stat"><strong>30 سؤالًا</strong><span>اختيار من متعدد</span></div>
+            <div class="hero-stat"><strong>3 مستويات</strong><span>سهل · متوسط · تفكير</span></div>
+            <div class="hero-stat"><strong>⭐ 90 نجمة</strong><span>اجمع أكبر عدد ممكن</span></div>
+          </div>
+          <div class="actions">
+            <button id="startBtn" class="primary-btn">ابدأ التحدي ←</button>
+            <button id="sfxStartBtn" class="toggle-btn on" aria-pressed="true">🔊 المؤثرات: تشغيل</button>
+            <button id="musicStartBtn" class="toggle-btn" aria-pressed="false">🎵 الموسيقى: إيقاف</button>
+          </div>
+          <div class="source-note">المحتوى الأكاديمي: درس «التكافل الاجتماعي – شرح وحفظ»، الصفحات 32–37 من الملف المرفوع.</div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="seal"><div class="orbit"><span></span></div><div class="seal-icon">🤝</div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="gameScreen" class="screen" aria-live="polite">
+    <section class="game-shell">
+      <header class="topbar">
+        <div class="brandline">
+          <div class="brand-mark">🤝</div>
+          <div><strong>التكافل الاجتماعي</strong><small>مجال الحديث الشريف</small></div>
+        </div>
+        <div class="audio-cluster">
+          <button id="sfxBtn" class="mini-btn on" aria-pressed="true" title="تشغيل أو إيقاف المؤثرات">🔊 مؤثرات</button>
+          <button id="musicBtn" class="mini-btn" aria-pressed="false" title="تشغيل أو إيقاف الموسيقى">🎵 موسيقى</button>
+        </div>
+      </header>
+
+      <section class="status" aria-label="التقدم والنتيجة">
+        <div>
+          <div class="progress-info"><span id="progressText">السؤال 1 من 30</span><span id="percentText">3%</span></div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressFill" class="progress-fill"></div></div>
+        </div>
+        <div class="hud">
+          <div class="hud-chip"><span>النقاط</span><strong id="scoreText">0</strong></div>
+          <div class="hud-chip"><span>النجوم</span><strong id="starsText">0 ⭐</strong></div>
+          <div class="hud-chip"><span>السلسلة</span><strong id="streakText">0 🔥</strong></div>
+        </div>
+      </section>
+
+      <section class="content">
+        <div class="meta">
+          <span id="unitPill" class="pill"></span>
+          <span id="lessonPill" class="pill"></span>
+          <span id="difficultyPill" class="pill difficulty"></span>
+        </div>
+        <article class="question-card">
+          <div class="visual" aria-hidden="true"><div id="visualIcon" class="vicon">📖</div></div>
+          <div>
+            <div id="qNumber" class="q-number">السؤال 1</div>
+            <h2 id="questionText" class="question"></h2>
+          </div>
+        </article>
+        <div id="answers" class="answers" role="group" aria-label="اختيارات الإجابة"></div>
+        <div id="feedback" class="feedback" role="status" aria-live="assertive"><span class="feedback-icon"></span><span class="feedback-text"></span></div>
+      </section>
+    </section>
+  </main>
+
+  <main id="resultScreen" class="screen" aria-labelledby="resultTitle">
+    <section class="results">
+      <div class="result-badge">🏆</div>
+      <h2 id="resultTitle">أحسنت! أكملت التحدي</h2>
+      <p class="lead">أنهيت جميع الأسئلة الثلاثين. راجع مؤشراتك، ثم يمكنك إعادة التحدي لتحسين الإتقان والنجوم.</p>
+      <div class="result-grid">
+        <div class="result-card"><span>النقاط</span><strong id="finalScore">0 / 300</strong></div>
+        <div class="result-card"><span>النجوم</span><strong id="finalStars">0 / 90</strong></div>
+        <div class="result-card"><span>إتقان المحاولة الأولى</span><strong id="finalMastery">0%</strong></div>
+        <div class="result-card"><span>المحاولات الخاطئة</span><strong id="finalWrong">0</strong></div>
+      </div>
+      <div id="resultMessage" class="result-message"></div>
+      <button id="restartBtn" class="primary-btn">↻ العب مرة أخرى</button>
+      <div class="footer-note">نصيحة: حاول الوصول إلى 90% فأكثر في «إتقان المحاولة الأولى».</div>
+    </section>
+  </main>
+</div>
+
+<div id="milestone" class="milestone" aria-hidden="true">
+  <div class="milestone-card">
+    <div class="big">⭐</div>
+    <h3 id="milestoneTitle">رائع!</h3>
+    <p id="milestoneText"></p>
+  </div>
+</div>
+<div id="confetti" class="confetti" aria-hidden="true"></div>
+
+<script>
+const questions = [{"id": 1, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "مَن راوي حديث «التكافل الاجتماعي»؟", "options": ["عمر بن الخطاب رضي الله عنه", "أبو موسى الأشعري رضي الله عنه", "عثمان بن عفان رضي الله عنه", "أهل البصرة"], "correctAnswer": 1, "visual": "hadith", "sourcePage": 33}, {"id": 2, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "ما اسم أبي موسى الأشعري وكنيته كما وردا في الدرس؟", "options": ["عبد الله بن قيس، أبو الأشعر", "عبد الله بن قيس، أبو موسى البصري", "قيس بن عبد الله، أبو موسى الأشعري", "عبد الله بن قيس، أبو موسى الأشعري"], "correctAnswer": 3, "visual": "person", "sourcePage": 33}, {"id": 3, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "إلى ماذا تشير كلمة «الأشعريين»؟", "options": ["جمع أشعري، نسبةً إلى قبيلة من اليمن اسمها الأشعر", "أهل المدينة المنورة", "مقرئو أهل البصرة فقط", "أهل الكوفة في زمن عثمان"], "correctAnswer": 0, "visual": "words", "sourcePage": 33}, {"id": 4, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "ما معنى «أرملوا» في الحديث؟", "options": ["هاجروا إلى المدينة", "خرجوا لقتال العدو", "نفد طعامهم أو قلَّ", "اقتسموا الطعام بالسوية"], "correctAnswer": 2, "visual": "words", "sourcePage": 33}, {"id": 5, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "ما معنى «الغزو» في الدرس؟", "options": ["جمع الطعام في ثوب واحد", "الخروج لقتال العدو", "المشاركة مع أفراد المجتمع", "التنافس في الخير"], "correctAnswer": 1, "visual": "words", "sourcePage": 33}, {"id": 6, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "ماذا كان الأشعريون يفعلون إذا قلَّ طعام عيالهم بالمدينة؟", "options": ["يتركون المدينة", "يحتفظ كل واحد بطعامه لنفسه", "يؤجلون الطعام إلى وقت آخر", "يجمعون ما عندهم في ثوب واحد"], "correctAnswer": 3, "visual": "share", "sourcePage": 32}, {"id": 7, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "كيف اقتسم الأشعريون ما جمعوه؟", "options": ["بحسب ما يملك كل فرد", "بالسوية بينهم", "لمن يملك أكثر فقط", "بحسب العمر"], "correctAnswer": 1, "visual": "share", "sourcePage": 32}, {"id": 8, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "ما الخُلُق الذي استحق به الأشعريون بُشرى النبي ﷺ في نشاط الدرس؟", "options": ["الصبر على البلاء", "النفقة في السر والعلانية", "الإيثار والتكافل", "العزلة عن المجتمع"], "correctAnswer": 2, "visual": "values", "sourcePage": 34}, {"id": 9, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "إلى أين هاجر أبو موسى الأشعري بعد إسلامه كما ورد في الدرس؟", "options": ["إلى الحبشة ثم إلى المدينة المنورة", "إلى الكوفة ثم البصرة", "إلى اليمن ثم المدينة", "إلى البصرة ثم الحبشة"], "correctAnswer": 0, "visual": "person", "sourcePage": 33}, {"id": 10, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "سهل", "question": "أي وصف ذُكر في فضل أبي موسى الأشعري؟", "options": ["كان مسؤولًا عن الزكاة وحدها", "كان من أهل المدينة فقط", "كان من كبار قرّاء الصحابة وفقهائهم، وحسن الصوت بتلاوة القرآن", "كان من قبيلة اسمها البصرة"], "correctAnswer": 2, "visual": "person", "sourcePage": 33}, {"id": 11, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ما المقصود بعبارة «في إناء واحد» في شرح المفردات؟", "options": ["وضعوا الطعام في المدينة فقط", "تركوا الطعام لأهل البصرة", "جمعوا الطعام دون تقسيمه", "قسموا بإناء واحد حتى يأخذ كل واحد مقدار نصيب الآخر"], "correctAnswer": 3, "visual": "words", "sourcePage": 33}, {"id": 12, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ماذا تعني عبارة «فهم مني» كما شرحها الكتاب؟", "options": ["يسكنون مع الرسول ﷺ في المدينة", "ينتسبون إلى منهج الرسول ﷺ وطريقته", "هم من قبيلته نفسها", "هم من أهل الكوفة"], "correctAnswer": 1, "visual": "words", "sourcePage": 33}, {"id": 13, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ماذا تدل عبارة «وأنا منهم» في شرح الكتاب؟", "options": ["أنهم من أهل اليمن فقط", "أنهم يعيشون في بيت واحد", "أنه ﷺ يبارك فعلهم فيما ذهبوا إليه من التكافل", "أنهم لا يحتاجون إلى التعاون"], "correctAnswer": 2, "visual": "words", "sourcePage": 33}, {"id": 14, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ما الذي يمثله فعل الأشعريين في شرح الحديث؟", "options": ["مثالًا عمليًا لتطبيق مبدأ التكافل الاجتماعي في أسمى صوره", "وسيلة إلزامية من وسائل الزكاة", "مثالًا على العزلة عن المجتمع", "حالة تقتصر على السفر فقط"], "correctAnswer": 0, "visual": "values", "sourcePage": 34}, {"id": 15, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "أي مجموعة قيم ذكرها الكتاب عند الحديث عن الإسلام والتكافل؟", "options": ["النفقة في السر والعلانية فقط", "العزلة والتنافس على المال", "الصبر على البلاء فقط", "التكافل والتراحم والتعاون والإيثار والمواساة"], "correctAnswer": 3, "visual": "values", "sourcePage": 34}, {"id": 16, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ماذا كان يفعل الأشعريون عند العُسرة والضيق وفق شرح الحديث؟", "options": ["يحتفظ كل واحد بماله وطعامه", "يقسمون الناس إلى من يملك ومن لا يملك", "يجمعون ما عندهم من طعام أو مال ويخلطونه حتى يصبح واحدًا", "يقتصرون على المساعدة المعنوية فقط"], "correctAnswer": 2, "visual": "share", "sourcePage": 34}, {"id": 17, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "أي عبارة تعبّر عن طريقة القسمة عند الأشعريين؟", "options": ["يأخذ المالك أكثر", "لا فرق بين من يملك ومن لا يملك", "يأخذ المقيم في المدينة أكثر", "لا يقسم الطعام إلا في الغزو"], "correctAnswer": 1, "visual": "share", "sourcePage": 34}, {"id": 18, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "ما مجالات التكافل الاجتماعي الثلاثة المذكورة في الدرس؟", "options": ["بين الأمم والشعوب فقط", "بين الفرد وأسرته فقط", "بين الفرد والمجتمع فقط", "بين الفرد وأسرته، وبين الفرد والمجتمع، وبين الأمم والشعوب"], "correctAnswer": 3, "visual": "fields", "sourcePage": 35}, {"id": 19, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "كيف وصف الكتاب الأسرة في مجال التكافل؟", "options": ["الوحدة الأساسية التي تقوم عليها الحياة الاجتماعية", "وسيلة مستحبة فقط", "جزء لا يؤثر في المجتمع", "مجال يقتصر على المساعدات الدولية"], "correctAnswer": 0, "visual": "family", "sourcePage": 35}, {"id": 20, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "أي مجموعة تضم وسائل إلزامية للتكافل بين الفرد والمجتمع؟", "options": ["الهبات والهدايا وصدقة الفطر", "الأضاحي والهبات والهدايا", "الزكاة والكفّارات وصدقة الفطر", "الأضاحي والزكاة والهدايا"], "correctAnswer": 2, "visual": "fields", "sourcePage": 35}, {"id": 21, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "أي مجموعة تضم وسائل مستحبة للتكافل بين الفرد والمجتمع؟", "options": ["الزكاة والكفّارات وصدقة الفطر", "الأضاحي والهبات والهدايا", "الزكاة والهدايا والكفّارات", "صدقة الفطر والأضاحي والكفّارات"], "correctAnswer": 1, "visual": "fields", "sourcePage": 35}, {"id": 22, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "متوسط", "question": "كيف يتحقق التكافل بين الأمم والشعوب وفق الدرس؟", "options": ["بصدقة الفطر وحدها", "بالعزلة عن الشعوب الأخرى", "بالهدايا داخل الأسرة فقط", "بمدّ أيادي الخير والمساعدات الإنسانية للشعوب المحتاجة"], "correctAnswer": 3, "visual": "globe", "sourcePage": 35}, {"id": 23, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "مجموعة من الناس قلّ طعامها، فجمعت ما بقي عندها وقسمته بالتساوي. أي فكرة من الدرس تطبقها هذه الصورة؟", "options": ["الوسائل المستحبة فقط", "العزلة عن المجتمع", "التكافل والإيثار", "النفقة في السر والعلانية فقط"], "correctAnswer": 2, "visual": "think", "sourcePage": 34}, {"id": 24, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "إذا قدّم شخص هديةً لغيره، فإلى أي نوع من وسائل التكافل بين الفرد والمجتمع تنتمي وفق الدرس؟", "options": ["وسيلة مستحبة", "وسيلة إلزامية", "مجال التكافل بين الأمم فقط", "ليست من وسائل التكافل"], "correctAnswer": 0, "visual": "think", "sourcePage": 35}, {"id": 25, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "إذا كان المثال هو «الزكاة»، ففي أي تصنيف يضعها الدرس؟", "options": ["وسيلة مستحبة", "وسيلة إلزامية", "تكافل بين الأمم فقط", "مثال على الهبات"], "correctAnswer": 1, "visual": "think", "sourcePage": 35}, {"id": 26, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "ما النتيجة التي يوضحها الكتاب إذا بُنيت الأسرة على أسس متينة من التكافل؟", "options": ["تنحصر المساعدة في السفر", "يصبح الفرد منعزلًا عن المجتمع", "يقتصر التكافل على المال", "يسهم ذلك في بناء مجتمع متين الأركان"], "correctAnswer": 3, "visual": "think", "sourcePage": 35}, {"id": 27, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "أي استنتاج يوافق «بعض الدروس المستفادة من الحديث»؟", "options": ["التكافل يخص الأسرة فقط", "التكافل يقتصر على الطعام فقط", "التكافل الاجتماعي يشمل المادي والمعنوي ولا يقتصر على المادي", "التكافل لا يرتبط بالمجتمع"], "correctAnswer": 2, "visual": "think", "sourcePage": 36}, {"id": 28, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "أي موقف يطابق المثال الذي ذكره الدرس عن دولة قطر في التكافل بين الأمم والشعوب؟", "options": ["الاقتصار على المساعدة داخل الأسرة", "مناصرة ودعم القضايا العربية والإسلامية والعالمية وتقديم المساعدات الإنسانية", "تقسيم الطعام في الغزو فقط", "الاكتفاء بالهدايا بين الأفراد"], "correctAnswer": 1, "visual": "globe", "sourcePage": 35}, {"id": 29, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "أي عبارة تمثل درسًا مستفادًا ذُكر صراحةً في الصفحة الخاصة بالمراجعة؟", "options": ["التشجيع على التنافس في الخير", "التنافس في جمع المال", "العزلة عند الشدة", "ترك المشاركة مع المجتمع"], "correctAnswer": 0, "visual": "think", "sourcePage": 36}, {"id": 30, "unit": "ثانيًا: مجال الحديث الشريف", "lesson": "التكافل الاجتماعي – شرح وحفظ", "difficulty": "تفكير", "question": "أي خلاصة تجمع الرسالة الأساسية للحديث والشرح؟", "options": ["قصر التكافل على العلاقات بين الدول", "الاحتفاظ بما يملك الفرد عند الشدة", "قصر التكافل على الوسائل الإلزامية", "المبادرة إلى التعاون والتكافل عند الحاجة وتقاسم ما يوجد بالعدل والمواساة"], "correctAnswer": 3, "visual": "think", "sourcePage": 34}];
+
+const icons = {
+  hadith:'📖', person:'👤', words:'🔤', share:'🤝', values:'💚', fields:'🧭', family:'🏠', globe:'🌍', think:'💡'
+};
+const labels = ['أ','ب','ج','د'];
+const encouragement = ['أحسنت!','رائع!','ممتاز!','إجابة صحيحة!','أبدعت!'];
+const retryMessages = ['حاول مرة أخرى','اقتربت، فكّر من جديد','راجع الاختيارات بهدوء'];
+
+const state = {
+  index:0, score:0, stars:0, streak:0, bestStreak:0,
+  wrongAttempts:0, firstTryCorrect:0, attemptsOnQuestion:0,
+  locked:false, sfxOn:true, musicOn:false, musicTimer:null, audioCtx:null
+};
+
+const el = id => document.getElementById(id);
+const startScreen = el('startScreen'), gameScreen = el('gameScreen'), resultScreen = el('resultScreen');
+const startBtn = el('startBtn'), restartBtn = el('restartBtn');
+const sfxStartBtn = el('sfxStartBtn'), musicStartBtn = el('musicStartBtn'), sfxBtn = el('sfxBtn'), musicBtn = el('musicBtn');
+
+function showScreen(target){ [startScreen,gameScreen,resultScreen].forEach(s=>s.classList.remove('active')); target.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function ensureAudio(){
+  if(!state.audioCtx){
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(AudioCtx) state.audioCtx = new AudioCtx();
+  }
+  if(state.audioCtx && state.audioCtx.state === 'suspended') state.audioCtx.resume();
+}
+
+function tone(freq=440, dur=.12, type='sine', gain=.055, offset=0){
+  if(!state.sfxOn || !state.audioCtx) return;
+  const ctx=state.audioCtx, o=ctx.createOscillator(), g=ctx.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,ctx.currentTime+offset);
+  g.gain.setValueAtTime(0,ctx.currentTime+offset);
+  g.gain.linearRampToValueAtTime(gain,ctx.currentTime+offset+.015);
+  g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+offset+dur);
+  o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+offset);o.stop(ctx.currentTime+offset+dur+.02);
+}
+function playClick(){tone(420,.06,'sine',.025)}
+function playSuccess(){tone(523,.15,'sine',.05);tone(659,.16,'sine',.045,.12);tone(784,.2,'sine',.045,.24)}
+function playWrong(){tone(220,.11,'triangle',.035);tone(185,.13,'triangle',.025,.09)}
+
+function musicPulse(){
+  if(!state.musicOn || !state.audioCtx) return;
+  const ctx=state.audioCtx;
+  [261.6,329.6,392].forEach((f,i)=>{
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type='sine';o.frequency.value=f/2;
+    g.gain.setValueAtTime(0,ctx.currentTime);
+    g.gain.linearRampToValueAtTime(.008,ctx.currentTime+.08+i*.03);
+    g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+1.8+i*.04);
+    o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+i*.03);o.stop(ctx.currentTime+2);
+  });
+}
+function syncMusic(){
+  clearInterval(state.musicTimer);state.musicTimer=null;
+  if(state.musicOn){ ensureAudio(); musicPulse(); state.musicTimer=setInterval(musicPulse,4600); }
+}
+function setSfx(on){ state.sfxOn=on; [sfxStartBtn,sfxBtn].forEach(b=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));}); sfxStartBtn.textContent=on?'🔊 المؤثرات: تشغيل':'🔇 المؤثرات: إيقاف'; sfxBtn.textContent=on?'🔊 مؤثرات':'🔇 مؤثرات'; }
+function setMusic(on){ state.musicOn=on; [musicStartBtn,musicBtn].forEach(b=>{b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));}); musicStartBtn.textContent=on?'🎵 الموسيقى: تشغيل':'🎵 الموسيقى: إيقاف'; musicBtn.textContent=on?'🎵 موسيقى':'🎵 موسيقى'; syncMusic(); }
+
+sfxStartBtn.addEventListener('click',()=>{ensureAudio();setSfx(!state.sfxOn);if(state.sfxOn)playClick();});
+sfxBtn.addEventListener('click',()=>{ensureAudio();setSfx(!state.sfxOn);if(state.sfxOn)playClick();});
+musicStartBtn.addEventListener('click',()=>{ensureAudio();setMusic(!state.musicOn);});
+musicBtn.addEventListener('click',()=>{ensureAudio();setMusic(!state.musicOn);});
+
+function updateHud(){
+  const current=state.index+1, pct=Math.round((current/questions.length)*100);
+  el('progressText').textContent=`السؤال ${Math.min(current,questions.length)} من ${questions.length}`;
+  el('percentText').textContent=`${pct}%`;
+  el('progressFill').style.width=`${pct}%`;
+  el('progressFill').parentElement.setAttribute('aria-valuenow',String(pct));
+  el('scoreText').textContent=state.score;
+  el('starsText').textContent=`${state.stars} ⭐`;
+  el('streakText').textContent=`${state.streak} 🔥`;
+}
+
+function renderQuestion(){
+  state.locked=false; state.attemptsOnQuestion=0;
+  const q=questions[state.index];
+  el('unitPill').textContent=q.unit;
+  el('lessonPill').textContent=q.lesson;
+  el('difficultyPill').textContent=`المستوى: ${q.difficulty}`;
+  el('qNumber').textContent=`السؤال ${q.id}`;
+  el('questionText').textContent=q.question;
+  el('visualIcon').textContent=icons[q.visual]||'📘';
+  const container=el('answers'); container.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='answer'; btn.type='button'; btn.dataset.index=i;
+    btn.setAttribute('aria-label',`الاختيار ${labels[i]}: ${opt}`);
+    btn.innerHTML=`<span class="label">${labels[i]}</span><span class="text"></span><span class="state" aria-hidden="true"></span>`;
+    btn.querySelector('.text').textContent=opt;
+    btn.addEventListener('click',()=>handleAnswer(btn,i));
+    container.appendChild(btn);
+  });
+  el('feedback').className='feedback';
+  el('feedback').querySelector('.feedback-text').textContent='';
+  updateHud();
+  requestAnimationFrame(()=>{const first=container.querySelector('button'); if(first) first.focus({preventScroll:true});});
+}
+
+function handleAnswer(btn,index){
+  if(state.locked) return;
+  ensureAudio(); playClick();
+  const q=questions[state.index];
+  state.attemptsOnQuestion++;
+  if(index===q.correctAnswer){
+    state.locked=true;
+    btn.classList.add('correct'); btn.querySelector('.state').textContent='✓';
+    const all=[...el('answers').querySelectorAll('.answer')]; all.forEach(b=>b.disabled=true);
+    const tries=state.attemptsOnQuestion;
+    const earnedScore=tries===1?10:(tries===2?7:5);
+    const earnedStars=tries===1?3:(tries===2?2:1);
+    state.score+=earnedScore; state.stars+=earnedStars;
+    if(tries===1){state.firstTryCorrect++;state.streak++;state.bestStreak=Math.max(state.bestStreak,state.streak);}else{state.streak=0;}
+    const msg=encouragement[Math.floor(Math.random()*encouragement.length)];
+    const feedback=el('feedback'); feedback.className='feedback show good'; feedback.querySelector('.feedback-icon').textContent='✓'; feedback.querySelector('.feedback-text').textContent=`${msg} +${earnedScore} نقاط · +${earnedStars} نجوم`;
+    playSuccess(); burstConfetti(); updateHud();
+    setTimeout(()=>advance(),1150);
+  }else{
+    state.wrongAttempts++; state.streak=0;
+    btn.classList.add('wrong'); btn.querySelector('.state').textContent='✕'; btn.disabled=true;
+    const feedback=el('feedback'); feedback.className='feedback show bad'; feedback.querySelector('.feedback-icon').textContent='↺'; feedback.querySelector('.feedback-text').textContent=retryMessages[Math.floor(Math.random()*retryMessages.length)];
+    playWrong(); updateHud();
+    setTimeout(()=>{btn.classList.remove('wrong');btn.querySelector('.state').textContent='';btn.disabled=false;feedback.className='feedback';btn.focus();},720);
+  }
+}
+
+function advance(){
+  const justFinished=state.index+1;
+  if(justFinished===10 || justFinished===20){
+    showMilestone(justFinished,()=>{state.index++;renderQuestion();});
+    return;
+  }
+  if(justFinished>=questions.length){ finishGame(); return; }
+  state.index++; renderQuestion();
+}
+
+function showMilestone(n,after){
+  const box=el('milestone');
+  el('milestoneTitle').textContent=n===10?'رائع! أكملت ثلث التحدي ⭐':'ممتاز! بقي الجزء الأخير 🚀';
+  el('milestoneText').textContent=n===10?'ثبتَّ الأساس: الراوي، المفردات، وأحداث الحديث. استمر بنفس التركيز.':'الآن تنتقل إلى أسئلة التطبيق والاستنتاج. اجعل الفكرة تقودك إلى الإجابة.';
+  box.classList.add('show');box.setAttribute('aria-hidden','false');
+  setTimeout(()=>{box.classList.remove('show');box.setAttribute('aria-hidden','true');after();},1450);
+}
+
+function burstConfetti(){
+  const wrap=el('confetti'); wrap.innerHTML='';
+  const colors=['#f2c14e','#17b890','#0f8f78','#123657','#ff8b6a'];
+  for(let i=0;i<26;i++){
+    const p=document.createElement('i');
+    p.style.left=(10+Math.random()*80)+'vw';
+    p.style.background=colors[i%colors.length];
+    p.style.setProperty('--drift',(-70+Math.random()*140)+'px');
+    p.style.animationDelay=(Math.random()*.16)+'s';
+    p.style.animationDuration=(1+Math.random()*.55)+'s';
+    wrap.appendChild(p);
+  }
+  setTimeout(()=>wrap.innerHTML='',1750);
+}
+
+function finishGame(){
+  clearInterval(state.musicTimer); state.musicTimer=null;
+  const mastery=Math.round((state.firstTryCorrect/questions.length)*100);
+  el('finalScore').textContent=`${state.score} / 300`;
+  el('finalStars').textContent=`${state.stars} / 90`;
+  el('finalMastery').textContent=`${mastery}%`;
+  el('finalWrong').textContent=state.wrongAttempts;
+  let message;
+  if(mastery>=90) message='أداء رائع — أنت متقن للمحتوى! حافظ على هذا المستوى وجرّب الوصول إلى أكبر عدد من النجوم.';
+  else if(mastery>=75) message='عمل ممتاز — واصل التقدم! إعادة التحدي ستثبت المفردات والتطبيقات أكثر.';
+  else message='أحسنت إكمال التحدي — المراجعة ستجعلك أقوى! أعد المحاولة وركّز على الأسئلة التي احتاجت أكثر من محاولة.';
+  el('resultMessage').textContent=message;
+  showScreen(resultScreen); burstConfetti();
+}
+
+function resetGame(){
+  state.index=0;state.score=0;state.stars=0;state.streak=0;state.bestStreak=0;state.wrongAttempts=0;state.firstTryCorrect=0;state.attemptsOnQuestion=0;state.locked=false;
+  if(state.musicOn) syncMusic();
+  showScreen(gameScreen);renderQuestion();
+}
+
+startBtn.addEventListener('click',()=>{ensureAudio(); if(state.sfxOn) playSuccess(); if(state.musicOn) syncMusic(); resetGame();});
+restartBtn.addEventListener('click',()=>{ensureAudio(); if(state.sfxOn) playClick(); resetGame();});
+
+document.addEventListener('keydown',(e)=>{
+  if(!gameScreen.classList.contains('active') || state.locked) return;
+  const map={'1':0,'2':1,'3':2,'4':3};
+  if(Object.prototype.hasOwnProperty.call(map,e.key)){
+    const b=el('answers').querySelectorAll('.answer')[map[e.key]]; if(b && !b.disabled) b.click();
+  }
+});
+
+// Basic runtime sanity checks
+console.assert(questions.length===30,'Question count must be 30');
+console.assert(questions.filter(q=>q.difficulty==='سهل').length===10,'Easy count');
+console.assert(questions.filter(q=>q.difficulty==='متوسط').length===12,'Medium count');
+console.assert(questions.filter(q=>q.difficulty==='تفكير').length===8,'Thinking count');
+</script>
+</body>
+</html>
